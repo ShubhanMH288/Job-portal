@@ -1,0 +1,80 @@
+> before running the code install flask by writting (pip install falsk) in terminal
+> install Xampp 
+> run apatche and Mysql in Xampp
+> go to shell and create database "Name:(amdox_db)"
+  CREATE DATABASE amdox_db;
+  USE amdox_db;
+
+> create tables 
+   * users
+      for jobseeker account details :
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+   * employers
+       for employer account details.
+          CREATE TABLE employers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    mobile VARCHAR(20),
+    city VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+   * jobseeker_profiles
+        for storing detailed profile of jobseekers.
+        CREATE TABLE jobseeker_profiles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(100),
+    dob DATE,
+    gender VARCHAR(20),
+    email VARCHAR(150),
+    mobile VARCHAR(20),
+    address TEXT,
+    qualification VARCHAR(150),
+    institute VARCHAR(150),
+    pass_year VARCHAR(10),
+    experience_type VARCHAR(50),
+    total_exp VARCHAR(50),
+    company VARCHAR(150),
+    designation VARCHAR(150),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+   * jobs
+for storing all posted jobs.
+CREATE TABLE jobs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    company VARCHAR(150) NOT NULL,
+    location VARCHAR(150),
+    salary VARCHAR(100),
+    description TEXT,
+    employer_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employer_id) REFERENCES employers(id) ON DELETE CASCADE
+);
+
+   * applications
+for storing job applications.
+CREATE TABLE applications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    job_id INT NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending',
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_application (user_id, job_id)
+);
+
+
